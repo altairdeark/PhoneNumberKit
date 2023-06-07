@@ -284,6 +284,20 @@ public final class PhoneNumberKit: NSObject {
     ///
     /// - returns: A computed value for the user's current region - based on the iPhone's carrier and if not available, the device region.
     public class func defaultRegionCode() -> String {
+        if #available(iOS 16, *) {
+            var code = Locale.current.region?.identifier.uppercased() ?? "US"
+            
+            if code.contains("001") {
+                code = "US"
+            }
+            
+            if code.contains("_") {
+                code = "US"
+            }
+            
+            return code
+        }
+        
         #if canImport(Contacts)
         if #available(iOS 9, macOS 10.11, macCatalyst 13.1, watchOS 2.0, *) {
             // macCatalyst OS bug if language is set to Korean
